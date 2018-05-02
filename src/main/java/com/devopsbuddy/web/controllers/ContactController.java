@@ -23,7 +23,7 @@ public class ContactController {
 	private static final String CONTACT_US_VIEW_NAME = "contact/contact";
 	
 	@Autowired
-	private EmailService emailService;
+	private EmailService emailService; //todo: use aws sns smtp to send mail.  spring-mail is blocked by yahoo
 	
 	@RequestMapping(value = "/contact", method = RequestMethod.GET)
 	public String contactGet(ModelMap model) {
