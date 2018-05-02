@@ -52,6 +52,11 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- spring-mail dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 		<!-- Logging Dependencies -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
