@@ -1,0 +1,50 @@
+package com.devopsbuddy.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
+    /** Public URLs. */
+    private static final String[] PUBLIC_MATCHERS = {
+            "/webjars/**",
+            "/css/**",
+            "/js/**",
+            "/images/**",
+            "/",
+            "/about/**",
+            "/contact/**",
+            "/error/**/*",
+    };
+  /*  
+    @Bean
+    public SpringSecurityDialect springSecurityDialect() {
+        return new SpringSecurityDialect();
+    }
+    */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(PUBLIC_MATCHERS).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage("/login").defaultSuccessUrl("/payload")
+                .failureUrl("/login?error").permitAll()
+                .and()
+                .logout().permitAll();//logout is automatically managed by spring
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("user").password("{noop}password")
+                .roles("USER");
+    }	
+}
