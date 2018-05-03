@@ -1,14 +1,11 @@
 package com.devopsbuddy.backend.persistence.domain.backend;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+
+import com.devopsbuddy.enums.RolesEnum;
 
 @Entity
 	public class Role implements Serializable {
@@ -23,9 +20,10 @@ import javax.persistence.OneToMany;
 
 	    //@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	    //private Set<UserRole> userRoles = new HashSet<>();
-
-	    public Role() {
-
+	    public Role() {}
+	    public Role(RolesEnum rolesEnum) {
+	    	this.id = rolesEnum.getId();
+	    	this.name = rolesEnum.getRoleName();
 	    }
 
 	    /**
