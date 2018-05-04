@@ -11,70 +11,64 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "user_role")
-public class UserRole implements Serializable {
+	@Entity
+	@Table(name = "user_role")
+	public class UserRole implements Serializable {
 
-    /** The Serial Version UID for Serializable classes. */
-    private static final long serialVersionUID = 1L;
+	    /** The Serial Version UID for Serializable classes. */
+	    private static final long serialVersionUID = 1L;
 
-    public UserRole() {
+	    public UserRole() {
 
-    }
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+	    }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+	    public UserRole(User user, Role role) {
+	        this.user = user;
+	        this.role = role;
+	    }
 
-    @JoinColumn(name = "role_id")
-    private Role role;
+	    @Id
+	    @ManyToOne(fetch = FetchType.LAZY)
+	    @JoinColumn(name = "user_id")
+	    private User user;
 
-    public User getUser() {
-        return user;
-    }
+	    @Id
+	    @ManyToOne(fetch = FetchType.LAZY)
+	    @JoinColumn(name = "role_id")
+	    private Role role;
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	    public User getUser() {
+	        return user;
+	    }
 
-    public Role getRole() {
-        return role;
-    }
+	    public void setUser(User user) {
+	        this.user = user;
+	    }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+	    public Role getRole() {
+	        return role;
+	    }
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	    public void setRole(Role role) {
+	        this.role = role;
+	    }
+
+	    @Override
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (o == null || getClass() != o.getClass()) return false;
+
+	        UserRole userRole = (UserRole) o;
+
+	        if (!user.equals(userRole.user)) return false;
+	        return role.equals(userRole.role);
+
+	    }
+
+	    @Override
+	    public int hashCode() {
+	        int result = user.hashCode();
+	        result = 31 * result + role.hashCode();
+	        return result;
+	    }
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserRole other = (UserRole) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
-
-
-}
