@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
-import org.h2.server.web.WebServlet;
 
 import com.devopsbuddy.backend.service.EmailService;
 import com.devopsbuddy.backend.service.MockEmailService;
@@ -25,18 +24,10 @@ public class DevelopmentConfig {
 		LOG.debug("using mock email service");
 		return new MockEmailService();
 	}
-<<<<<<< HEAD
-  @Bean
-=======
 	@Bean
->>>>>>> jpa2
     public ServletRegistrationBean h2ConsoleServletRegistration() {
         ServletRegistrationBean bean = new ServletRegistrationBean(new WebServlet());
         bean.addUrlMappings("/console/*");
         return bean;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> jpa2

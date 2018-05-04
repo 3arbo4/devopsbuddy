@@ -10,31 +10,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-<<<<<<< HEAD
-
-import com.devopsbuddy.backend.service.UserSecurityService;
-=======
->>>>>>> jpa2
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
-<<<<<<< HEAD
-   
-	@Autowired
-	private Environment env;
-	
-	@Autowired
-	private UserSecurityService userSecurityService;
-	
-	/** Public URLs. */
-=======
 	
 	@Autowired
 	public Environment env;
 	
     /** Public URLs. */
->>>>>>> jpa2
     private static final String[] PUBLIC_MATCHERS = {
             "/webjars/**",
             "/css/**",
@@ -54,15 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-<<<<<<< HEAD
-	   List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-       if (activeProfiles.contains("dev")) {
-           http.csrf().disable();
-           http.headers().frameOptions().disable();
-       }
-
-       http.authorizeRequests()
-=======
     	
         List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         if (activeProfiles.contains("dev")) {
@@ -71,7 +46,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         }
         
         http.authorizeRequests()
->>>>>>> jpa2
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -83,6 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userSecurityService);
+        auth.inMemoryAuthentication()
+                .withUser("user").password("{noop}password")
+                .roles("USER");
     }	
 }
