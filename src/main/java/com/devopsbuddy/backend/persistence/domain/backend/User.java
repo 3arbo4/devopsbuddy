@@ -29,8 +29,12 @@ public class User implements Serializable, UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
+	@Column(unique = true)
 	private String username;
 	private String password;
+	
+	@Column(unique = true)
 	private String email;
 	
 	@Column(name = "first_name")
@@ -190,9 +194,9 @@ public class User implements Serializable, UserDetails {
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-    //    Set<GrantedAuthority> authorities = new HashSet<>();
-    //    userRoles.forEach(ur -> authorities.add(new Authority(ur.getRole().getName())));
-        return null; //authorities;
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        userRoles.forEach(ur -> authorities.add(new Authority(ur.getRole().getName())));
+        return authorities;
     }
     @Override
 	public int hashCode() {

@@ -1,16 +1,10 @@
 package com.devopsbuddy.backend.persistence.domain.backend;
-
+import javax.persistence.*;
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+/**
+ * Created by tedonema on 28/03/2016.
+ */
 @Entity
 @Table(name = "user_role")
 public class UserRole implements Serializable {
@@ -21,16 +15,23 @@ public class UserRole implements Serializable {
     public UserRole() {
 
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
+
+    public UserRole(User user, Role role) {
+        this.user = user;
+        this.role = role;
+    }
+
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
 
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -50,31 +51,27 @@ public class UserRole implements Serializable {
         this.role = role;
     }
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+    public long getId() {
+        return id;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserRole other = (UserRole) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        UserRole userRole = (UserRole) o;
 
+        return id == userRole.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
 }
