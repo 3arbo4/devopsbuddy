@@ -1,5 +1,7 @@
 package com.devopsbuddy.backend.persistence.domain.backend;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,9 +17,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-public class User {
+public class User implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;
 	public User() {}
@@ -169,8 +173,28 @@ public class User {
 	public void setPlan(Plan plan) {
 		this.plan = plan;
 	}
+	 @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-	@Override
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+    //    Set<GrantedAuthority> authorities = new HashSet<>();
+    //    userRoles.forEach(ur -> authorities.add(new Authority(ur.getRole().getName())));
+        return null; //authorities;
+    }
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

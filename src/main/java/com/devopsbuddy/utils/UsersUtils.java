@@ -2,12 +2,12 @@ package com.devopsbuddy.utils;
 
 import com.devopsbuddy.backend.persistence.domain.backend.User;
 
-public class UserUtils {
+public class UsersUtils {
 
     /**
      * Non instantiable.
      */
-    private UserUtils() {
+    private UsersUtils() {
         throw new AssertionError("Non instantiable");
     }
 
