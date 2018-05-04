@@ -5,7 +5,17 @@ import org.springframework.stereotype.Repository;
 
 import com.devopsbuddy.backend.persistence.domain.backend.User;
 
+/**
+ * Created by tedonema on 29/03/2016.
+ */
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {//because the user is of type Long
+public interface UserRepository extends CrudRepository<User, Long> {
+
+    /**
+     * Returns a User given a username or null if not found.
+     * @param username The username
+     * @return a User given a username or null if not found.
+     */
+    public User findByUsername(String username);
 
 }

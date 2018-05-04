@@ -11,53 +11,57 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
-   
-	@Autowired
-	private Environment env;
-	
-	/** Public URLs. */
-    private static final String[] PUBLIC_MATCHERS = {
-            "/webjars/**",
-            "/css/**",
-            "/js/**",
-            "/images/**",
-            "/",
-            "/about/**",
-            "/contact/**",
-            "/error/**/*",
-            "/console/**"
-    };
-  /*  
-    @Bean
-    public SpringSecurityDialect springSecurityDialect() {
-        return new SpringSecurityDialect();
-    }
-    */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-	   List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-       if (activeProfiles.contains("dev")) {
-           http.csrf().disable();
-           http.headers().frameOptions().disable();
-       }
+import com.devopsbuddy.backend.service.UserSecurityService;
 
-       http.authorizeRequests()
-                .antMatchers(PUBLIC_MATCHERS).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/payload")
-                .failureUrl("/login?error").permitAll()
-                .and()
-                .logout().permitAll();//logout is automatically managed by spring
-    }
+	/**
+	 * Created by tedonema on 26/03/2016.
+	 */
+	@Configuration
+	@EnableWebSecurity
+	public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user").password("{noop}password")
-                .roles("USER");
-    }	
-}
+	    @Autowired
+	    private UserSecurityService userSecurityService;
+
+	    @Autowired
+	    private Environment env;
+
+	    /** Public URLs. */
+	    private static final String[] PUBLIC_MATCHERS = {
+	            "/webjars/**",
+	            "/css/**",
+	            "/js/**",
+	            "/images/**",
+	            "/",
+	            "/about/**",
+	            "/contact/**",
+	            "/error/**/*",
+	            "/console/**"
+	    };
+
+	    @Override
+	    protected void configure(HttpSecurity http) throws Exception {
+
+	        List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+	        if (activeProfiles.contains("dev")) {
+	            http.csrf().disable();
+	            http.headers().frameOptions().disable();
+	        }
+
+	        http
+	                .authorizeRequests()
+	                .antMatchers(PUBLIC_MATCHERS).permitAll()
+	                .anyRequest().authenticated()
+	                .and()
+	                .formLogin().loginPage("/login").defaultSuccessUrl("/payload")
+	                .failureUrl("/login?error").permitAll()
+	                .and()
+	                .logout().permitAll();
+	    }
+
+	    @Autowired
+	    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	        auth
+	                .userDetailsService(userSecurityService);
+	    }
+	}
