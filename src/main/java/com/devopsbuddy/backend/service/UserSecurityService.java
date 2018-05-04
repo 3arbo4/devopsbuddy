@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.devopsbuddy.backend.persistence.domain.backend.User;
 import com.devopsbuddy.backend.persistence.repositories.UserRepository;
 
 @Service
@@ -20,7 +21,12 @@ public class UserSecurityService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return null;
+		User user = userRepository.findByUsername(username);
+		if (null == user) {
+			LOG.warn("Username{} not found", username);;
+			throw new UsernameNotFoundException("Username " + username + " not found");
+		}
+		return user;
 	}
 
 }

@@ -1,15 +1,18 @@
 package com.devopsbuddy.config;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.devopsbuddy.backend.service.UserSecurityService;
 
@@ -22,7 +25,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private UserSecurityService userSecurityService;
-	
+	/**
+	 * Salt value used in encryption; once defined never change it as its used
+	 * to resolve passwords.  this should be stored in a db for production use.
+	 */
+	private static String SALT = "q13425ujim,l. x"; //should keep size around 12 since it takes cpu cycles to encrypt
     /** Public URLs. */
     private static final String[] PUBLIC_MATCHERS = {
             "/webjars/**",
@@ -35,6 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             "/error/**/*",
             "/console/**"
     };
+    
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+    	return new BCryptPasswordEncoder(12, new SecureRandom(SALT.getBytes()));
+    }
+    
   /*  
     @Bean
     public SpringSecurityDialect springSecurityDialect() {
@@ -62,6 +75,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userSecurityService);
+        auth.userDetailsService(userSecurityService).passwordEncoder(passwordEncoder());
     }	
 }
